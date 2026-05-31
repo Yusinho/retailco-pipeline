@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env
+venv/
+.venv/
+
+# dbt
+dbt_project/target/
+dbt_project/dbt_packages/
+dbt_project/logs/
+
+# Airflow
+airflow/logs/
+airflow/*.db
+
+# Docker
+.docker/
+
+# Credentials - NEVER commit these
+*.key
+secrets/
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db

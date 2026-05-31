@@ -1,0 +1,119 @@
+version: "3.9"
+
+x-airflow-common: &airflow-common
+  image: apache/airflow:2.9.3-python3.11
+  environment:
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres-meta/airflow
+    AIRFLOW__CORE__FERNET_KEY: ""
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
+    AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    AIRFLOW__API__AUTH_BACKENDS: "airflow.api.auth.backend.basic_auth"
+    ERP_API_KEY: "hrp_d59a970f5c4503b9ff4e73d69924fb4a2638ffd0270b4fd95589f49ac8010fca"
+    ERP_BASE_URL: "https://hngstage8da-55c7f5f769c8.herokuapp.com"
+    LAKE_DB_URL: "postgresql://lake:lake@postgres-lake:5432/lake"
+    WAREHOUSE_DB_URL: "postgresql://warehouse:warehouse@postgres-warehouse:5432/warehouse"
+    _PIP_ADDITIONAL_REQUIREMENTS: "requests psycopg2-binary dlt[postgres] dbt-core dbt-postgres"
+  volumes:
+    - ./airflow/dags:/opt/airflow/dags
+    - ./airflow/plugins:/opt/airflow/plugins
+    - ./extractor:/opt/airflow/extractor
+    - ./dlt_pipeline:/opt/airflow/dlt_pipeline
+    - ./dbt_project:/opt/airflow/dbt_project
+    - airflow-logs:/opt/airflow/logs
+  depends_on:
+    postgres-meta:
+      condition: service_healthy
+
+services:
+
+  # ── Metadata DB for Airflow ─────────────────────────────────────────────────
+  postgres-meta:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - pg-meta:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 10s
+      retries: 5
+
+  # ── Lake (raw data lake) ────────────────────────────────────────────────────
+  postgres-lake:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: lake
+      POSTGRES_PASSWORD: lake
+      POSTGRES_DB: lake
+    ports:
+      - "5433:5432"
+    volumes:
+      - pg-lake:/var/lib/postgresql/data
+      - ./init/lake_init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "lake"]
+      interval: 10s
+      retries: 5
+
+  # ── Warehouse ───────────────────────────────────────────────────────────────
+  postgres-warehouse:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: warehouse
+      POSTGRES_PASSWORD: warehouse
+      POSTGRES_DB: warehouse
+    ports:
+      - "5434:5432"
+    volumes:
+      - pg-warehouse:/var/lib/postgresql/data
+      - ./init/warehouse_init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "warehouse"]
+      interval: 10s
+      retries: 5
+
+  # ── Airflow init ────────────────────────────────────────────────────────────
+  airflow-init:
+    <<: *airflow-common
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - |
+        airflow db migrate
+        airflow users create \
+          --username admin \
+          --firstname Admin \
+          --lastname User \
+          --role Admin \
+          --email admin@retailco.ng \
+          --password admin
+    restart: "no"
+
+  # ── Airflow webserver ───────────────────────────────────────────────────────
+  airflow-webserver:
+    <<: *airflow-common
+    command: webserver
+    ports:
+      - "8080:8080"
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  # ── Airflow scheduler ───────────────────────────────────────────────────────
+  airflow-scheduler:
+    <<: *airflow-common
+    command: scheduler
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+volumes:
+  pg-meta:
+  pg-lake:
+  pg-warehouse:
+  airflow-logs:

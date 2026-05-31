@@ -1,0 +1,12 @@
+retailco:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: postgres-warehouse
+      port: 5432
+      user: warehouse
+      password: warehouse
+      dbname: warehouse
+      schema: marts
+      threads: 4

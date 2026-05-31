@@ -1,0 +1,41 @@
+[0m06:28:31.497267 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001D4BF9BB010>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001D4C09D11D0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001D4C0A02C10>]}
+
+
+============================== 06:28:31.546958 | a9255edf-418b-41af-8759-33485de27b18 ==============================
+[0m06:28:31.546958 [info ] [MainThread]: Running with dbt=1.11.11
+[0m06:28:31.546958 [debug] [MainThread]: running dbt with arguments {'static_parser': 'True', 'no_print': 'None', 'version_check': 'True', 'target_path': 'None', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'printer_width': '80', 'write_json': 'True', 'empty': 'None', 'log_cache_events': 'False', 'introspect': 'True', 'cache_selected_only': 'False', 'fail_fast': 'False', 'debug': 'False', 'log_format': 'default', 'partial_parse': 'True', 'send_anonymous_usage_stats': 'True', 'quiet': 'False', 'warn_error': 'None', 'profiles_dir': 'C:\\Users\\yusinho\\.dbt', 'use_colors': 'True', 'indirect_selection': 'eager', 'invocation_command': 'dbt init retailco_project', 'use_experimental_parser': 'False', 'log_path': 'logs'}
+[0m06:28:33.191302 [info ] [MainThread]: Creating dbt configuration folder at C:\Users\yusinho\.dbt
+[0m06:28:33.196573 [debug] [MainThread]: Starter project path: C:\Users\yusinho\AppData\Local\Programs\Python\Python311\Lib\site-packages\dbt\include\starter_project
+[0m06:28:33.338071 [info ] [MainThread]: 
+Your new dbt project "retailco_project" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m06:28:33.339071 [info ] [MainThread]: Setting up your profile.
+[0m06:31:25.948938 [info ] [MainThread]: Profile retailco_project written to C:\Users\yusinho\.dbt\profiles.yml using target's profile_template.yml and your supplied values. Run 'dbt debug' to validate the connection.
+[0m06:31:25.948938 [debug] [MainThread]: Command `dbt init` succeeded at 06:31:25.948938 after 174.60 seconds
+[0m06:31:25.948938 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001D4BF671750>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001D4B8BB8190>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001D4BF75FC50>]}
+[0m06:31:25.948938 [debug] [MainThread]: Flushing usage events
+[0m06:31:27.241044 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m06:32:52.347121 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002A70B970D90>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002A70A750050>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002A70B9D7FD0>]}
+
+
+============================== 06:32:52.362750 | 4c1bfa01-ae6e-445f-afb5-6d429e15bab2 ==============================
+[0m06:32:52.362750 [info ] [MainThread]: Running with dbt=1.11.11
+[0m06:32:52.362750 [debug] [MainThread]: running dbt with arguments {'version_check': 'True', 'no_print': 'None', 'static_parser': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'target_path': 'None', 'printer_width': '80', 'write_json': 'True', 'introspect': 'True', 'log_cache_events': 'False', 'empty': 'None', 'cache_selected_only': 'False', 'log_format': 'default', 'debug': 'False', 'fail_fast': 'False', 'profiles_dir': 'C:\\Users\\yusinho\\.dbt', 'send_anonymous_usage_stats': 'True', 'quiet': 'False', 'warn_error': 'None', 'partial_parse': 'True', 'use_colors': 'True', 'indirect_selection': 'eager', 'invocation_command': 'dbt init retailco_project', 'use_experimental_parser': 'False', 'log_path': 'logs'}
+[0m06:32:52.412572 [info ] [MainThread]: A project called retailco_project already exists here.
+[0m06:32:52.414567 [debug] [MainThread]: Command `dbt init` succeeded at 06:32:52.414567 after 0.23 seconds
+[0m06:32:52.416570 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002A703C48190>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002A703C480D0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002A70B973F50>]}
+[0m06:32:52.417572 [debug] [MainThread]: Flushing usage events
+[0m06:32:53.645779 [debug] [MainThread]: An error was encountered while trying to flush usage events

@@ -1,0 +1,221 @@
+version: 2
+
+sources:
+  - name: raw
+    database: warehouse
+    schema: raw
+    tables:
+      - name: customers
+      - name: products
+      - name: stores
+      - name: employees
+      - name: orders
+      - name: order_items
+      - name: payments
+      - name: inventory_movements
+      - name: payment_methods
+
+models:
+
+  # ── Staging ─────────────────────────────────────────────────────────────────
+  - name: stg_customers
+    columns:
+      - name: customer_id
+        tests: [not_null, unique]
+
+  - name: stg_products
+    columns:
+      - name: product_id
+        tests: [not_null, unique]
+
+  - name: stg_stores
+    columns:
+      - name: store_id
+        tests: [not_null, unique]
+
+  - name: stg_employees
+    columns:
+      - name: employee_id
+        tests: [not_null, unique]
+
+  - name: stg_orders
+    columns:
+      - name: order_id
+        tests: [not_null, unique]
+
+  - name: stg_order_items
+    columns:
+      - name: order_item_id
+        tests: [not_null, unique]
+
+  - name: stg_payments
+    columns:
+      - name: payment_id
+        tests: [not_null, unique]
+
+  - name: stg_inventory_movements
+    columns:
+      - name: movement_id
+        tests: [not_null, unique]
+
+  - name: stg_payment_methods
+    columns:
+      - name: payment_method_id
+        tests: [not_null, unique]
+
+  # ── Dimensions ──────────────────────────────────────────────────────────────
+  - name: dim_date
+    columns:
+      - name: date_key
+        tests: [not_null, unique]
+      - name: full_date
+        tests: [not_null]
+
+  - name: dim_customer
+    columns:
+      - name: customer_key
+        tests: [not_null, unique]
+      - name: customer_id
+        tests: [not_null]
+
+  - name: dim_product
+    columns:
+      - name: product_key
+        tests: [not_null, unique]
+      - name: product_id
+        tests: [not_null]
+
+  - name: dim_store
+    columns:
+      - name: store_key
+        tests: [not_null, unique]
+      - name: store_id
+        tests: [not_null, unique]
+
+  - name: dim_employee
+    columns:
+      - name: employee_key
+        tests: [not_null, unique]
+      - name: employee_id
+        tests: [not_null, unique]
+
+  - name: dim_payment_method
+    columns:
+      - name: payment_method_key
+        tests: [not_null, unique]
+      - name: payment_method_id
+        tests: [not_null, unique]
+
+  # ── Fact tables ──────────────────────────────────────────────────────────────
+  - name: fct_sales
+    columns:
+      - name: sales_key
+        tests: [not_null, unique]
+      - name: order_date_key
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_date')
+              field: date_key
+      - name: customer_key
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customer')
+              field: customer_key
+      - name: product_key
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_product')
+              field: product_key
+      - name: store_key
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_store')
+              field: store_key
+      - name: employee_key
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_employee')
+              field: employee_key
+      - name: quantity
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: "> 0"
+      - name: net_revenue
+        tests: [not_null]
+
+  - name: fct_payments
+    columns:
+      - name: payment_key
+        tests: [not_null, unique]
+      - name: payment_date_key
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_date')
+              field: date_key
+      - name: payment_method_key
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_payment_method')
+              field: payment_method_key
+      - name: store_key
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_store')
+              field: store_key
+
+  - name: fct_inventory_daily
+    columns:
+      - name: inventory_key
+        tests: [not_null, unique]
+      - name: snapshot_date_key
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_date')
+              field: date_key
+      - name: product_key
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_product')
+              field: product_key
+      - name: store_key
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_store')
+              field: store_key
+
+  - name: fct_order_lifecycle
+    columns:
+      - name: lifecycle_key
+        tests: [not_null, unique]
+      - name: order_id
+        tests: [not_null, unique]
+      - name: order_date_key
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_date')
+              field: date_key
+      - name: customer_key
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customer')
+              field: customer_key
+      - name: store_key
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_store')
+              field: store_key

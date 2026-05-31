@@ -1,0 +1,18 @@
+name: retailco_project
+version: "1.0.0"
+config-version: 2
+
+profile: retailco_project
+
+model-paths: ["models"]
+snapshot-paths: ["snapshots"]
+test-paths: ["tests"]
+
+models:
+  retailco_project:
+    staging:
+      +schema: staging
+      +materialized: view
+    marts:
+      +schema: marts
+      +materialized: table
