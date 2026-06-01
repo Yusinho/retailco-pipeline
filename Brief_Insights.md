@@ -37,12 +37,13 @@ ORDER BY total_revenue DESC
 LIMIT 10;
 ```
 
-**Insight:** Lagos stores are expected to lead in volume given population density,
-while Abuja stores likely command higher average order values due to the purchasing
-power of the FCT market. Product categories with high average selling prices
-(electronics, premium fashion) will disproportionately drive revenue even at lower
-unit volumes. Monthly trending should reveal seasonality peaks around Nigerian
-public holidays (Christmas, Eid) and payday cycles.
+**Insight:** Kano leads in both total revenue and transaction count 
+
+across the dataset. Lagos ranks second by transaction counts. Abuja shows the 
+highest average order value per transaction. This challenges the 
+assumption that population density alone drives retail revenue and 
+suggests store-level factors: product mix, competition density and 
+purchasing behaviour — may be stronger determinants of performance.
 
 ---
 
